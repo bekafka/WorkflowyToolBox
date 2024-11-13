@@ -1,16 +1,16 @@
 // ==UserScript==
 // @name WF ToolBox
-// @description 将各种Workflowy插件集成
-// @namespace github.com/openstyles/stylus
-// @version 20241113V0.5
+// @description Workflowy 插件集成
+// @namespace https://github.com/bekafka/WorkflowyToolBox
+// @version 20241113V0.5.1
 // @author YYYYang
 // @license MIT
 // @match http://workflowy.com/*
 // @match https://workflowy.com/*
 // @match http://*.workflowy.com/*
 // @match https://*.workflowy.com/*
-// @downloadURL https://update.greasyfork.org/scripts/516932/wf-toolbox.user.js
-// @updateURL https://update.greasyfork.org/scripts/516932/wf-toolbox.meta.js
+// @downloadURL https://raw.githubusercontent.com/bekafka/WorkflowyToolBox/refs/heads/main/WFToolBox.js
+// @updateURL https://raw.githubusercontent.com/bekafka/WorkflowyToolBox/refs/heads/main/WFToolBox.js
 // @icon  https://www.google.com/s2/favicons?sz=64&domain=workflowy.com
 // @grant GM_setClipboard
 // @grant GM_notification
