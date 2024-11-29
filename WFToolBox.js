@@ -2,7 +2,7 @@
 // @name WF ToolBox
 // @description Workflowy 插件集成
 // @namespace https://github.com/bekafka/WorkflowyToolBox
-// @version 20241113V0.5.1
+// @version 20241129V0.6
 // @author YYYYang
 // @license MIT
 // @match http://workflowy.com/*
@@ -110,8 +110,8 @@ const Find_Replace = () => {
       const addButton = (num, name) => `<button type="button" class="btnX" id="btn${num.toString()}">${name}</button>`;
       const boxStyle = `#inputBx{${getColors()}width:95%;height:20px;display:block;margin-top:5px;border:1px solid #ccc;border-radius:4px;padding:4px}`;
       const btnStyle = `.btnX{font-size:18px;background-color:gray;border:2px solid;border-radius:20px;color:#fff;padding:5px 15px;margin-top:16px;margin-right:16px}.btnX:focus,.btnX:hover{border-color:#c4c4c4;background-color:steelblue}`;
-      const box = `<div><b>Replace:</b><input value="${htmlEscText(searchValue)}" id="inputBx" type="text" spellcheck="false"></div>`;
-      const buttons = addButton(1, `Replace: All (${aCount})`) + addButton(2, `Replace: Match Case (${cCount})`);
+      const box = `<div><b>替换文本:</b><input value="${htmlEscText(searchValue)}" id="inputBx" type="text" spellcheck="false"></div>`;
+      const buttons = addButton(1, `替换: 全部 (${aCount})`) + addButton(2, `替换: 区分大小写 (${cCount})`);
       WF.showAlertDialog(`<style>${boxStyle + btnStyle}</style><div>${BODY}</div>${box}<div>${buttons}</div>`, TITLE);
       const intervalId = setInterval(function () {
         let inputBx = document.getElementById("inputBx");
@@ -144,7 +144,7 @@ const Find_Replace = () => {
       }, 50);
     }
     if (!WF.currentSearchQuery()) {
-      return void toastMsg('请先使用搜索框键入关键词  <a href="https://workflowy.com/s/findreplace-bookmark/ynKNSb5dA77p2siT" target="_blank"> ⇒ 更多信息请查看</a>', 4, true);
+      return void toastMsg('请先使用搜索框键入关键词  ⇒  <a href="https://workflowy.com/s/findreplace-bookmark/ynKNSb5dA77p2siT" target="_blank">更多信息请查看</a>', 4, true);
     }
     const tQuery = WF.currentSearchQuery().trim();
     const Matches = findMatchingItems(editableItemWithVisibleMatch, WF.currentItem());
@@ -156,11 +156,11 @@ const Find_Replace = () => {
       }
       return;
     }
-    const title = "Find/Replace";
+    const title = "查找与替换 / Find&Replace";
     const modeTxt = isQuoted ? "Exact Match, " : "Single Word/Tag, ";
     const compTxt = `Completed: ${WF.completedVisible() ? "Included" : "Excluded"}`;
     const findTxt = isQuoted ? isQuoted[0] : tQuery;
-    const body = `<p><b>Mode:</b><br>${modeTxt + compTxt}</p><p><b>Find:</b><br>${htmlEscText(findTxt)}</p>`;
+    const body = `<p><b>模式 / Mode：</b><br>${modeTxt + compTxt}</p><p><b>匹配关键词 / Find：</b><br>${htmlEscText(findTxt)}</p>`;
     const findRgx = escapeForRegExp(htmlEscTextForContent(find));
     const rgx_gi = new RegExp(findRgx, "gi");
     const rgx_g = new RegExp(findRgx, "g");
@@ -169,7 +169,7 @@ const Find_Replace = () => {
     if (allCount > 0) {
       showFindReplaceDialog(body, title, allCount, caseCount, find);
     } else {
-      WF.showAlertDialog(`${body}<br><br><i>No matches found.</i>`, title);
+      WF.showAlertDialog(`${body}<br><br><i>😞 没有匹配的搜索结果。 / No matches found.</i>`, title);
     }
   })();
 
@@ -223,7 +223,7 @@ const WF_Sort = () => {
 
     if (WF.currentSearchQuery()) return void toastMsg("Sorting is disabled when search is active.", 4, true);
     const parent = WF.currentItem();
-    if (parent.isReadOnly()) return void toastMsg("Parent是只读的，不能被排序。", 4, true);
+    if (parent.isReadOnly()) return void toastMsg("Parent 是只读的，不能被排序。", 4, true);
     const children = parent.getChildren();
     if (children.length < 2) return void toastMsg("Nothing to sort.", 4, true);
     if (children.length > maxChildren) return void toastMsg(`Sorting more than ${maxChildren} children upsets the WorkFlowy gods, and has been disabled.`, 5, true);
@@ -251,8 +251,8 @@ const NodeWord_Count = () => {
   let d = WF.currentItem(), [g, h] = e(d);
 
   WF.showMessage(
-    `🔘【当页节点总数 <b>${d.getNumDescendants()}</b>
-      ，当页根节点个数 <b>${d.getChildren().length}</b>】
+    `🔘【本页节点总数 <b>${d.getNumDescendants()}</b>
+      ，本页根节点个数 <b>${d.getChildren().length}</b>】
       &nbsp;&nbsp;&nbsp;&nbsp;🅰️【文本字数 <b>${g}</b>
       ，注释字数 <b>${h}</b>】`
   )
@@ -367,7 +367,7 @@ const TagIndex = () => {
     const current = WF.currentItem();
     const tagCounts = WF.currentSearchQuery() ? getVisibleTagsList(current) : getWfTagsList(current);
     if (tagCounts.length === 0) {
-      return void toastMsg("No tags found.", 2, true)
+      return void toastMsg("未找到任何标签", 3, true)
     }
     if (sortByCount) tagCounts.sort((a, b) => b.count - a.count);
 
@@ -452,11 +452,32 @@ const TagIndex = () => {
 };
 
 
+const TextMosaic = () => {
+  // alert("文字马赛克");
+
+  // const TMstyle = '.innerContentContainer, .innerContentContainer .contentTag, .innerContentContainer span, .contentLink { color: transparent !important; background: none !important; text-shadow: #A5A1A1 0 0 6px; }';
+
+  // GM_addStyle(`${TMstyle}`);
+
+
+  // const intervalStyle = setInterval(
+  //   function () {
+
+  //     document.head.appendChild(TMstyle);
+  //   }, 5000);
+
+
+  // clearInterval(intervalStyle);
+}
+
+
+
+
 if (isShowPageBar) {
 
   /** 添加样式 **/
   GM_addStyle(`
-  #dms-link-cleaner {
+#dms-link-cleaner {
   width: 100%;
   position: fixed;
   left: 0;
@@ -484,13 +505,18 @@ if (isShowPageBar) {
 }
 #dms-lc-button:hover {
   color: rgba(0, 0, 0, .8);
-  background-color: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 0 5px rgba(0, 0, 0, .5);
 }
 #dms-lc-panel {
   display: none;
   border-top: 5px solid #65adff;
-  background-color: #FFF;
   box-shadow: 0 0 5px rgba(0, 0, 0, .1);
+}
+body._theme-default #dms-lc-panel{
+  background-color: #FFF;
+}
+body._theme-dark #dms-lc-panel{
+  background-color: rgb(24 25 28 / 90%);
 }
 #dms-lc-panel > #dms-lc-panel-content {
   display: flex;
@@ -591,8 +617,8 @@ if (isShowPageBar) {
     <div class="dms-lc-button" id="dmsCLFR" data-tip="查找与替换">
       查找与替换
     </div>
-    <div class="dms-lc-button" id="dmsCLST" data-tip="WF节点排序">
-      WF节点排序
+    <div class="dms-lc-button" id="dmsCLST" data-tip="节点排序">
+      节点排序
     </div>
     <div class="dms-lc-button" id="dmsCLNWC" data-tip="节点与字数统计">
       节点与字数统计
@@ -607,8 +633,8 @@ if (isShowPageBar) {
     <div class="dms-lc-button" id="dmsCLButtonCopyTitle" data-tip="预留功能">
       预留功能
     </div>
-    <div class="dms-lc-button" id="dmsCLButtonCopyLink" data-tip="预留功能">
-      预留功能
+    <div class="dms-lc-button" id="dmsCLTM" data-tip="文字马赛克">
+      文字马赛克
     </div>
     <div class="dms-lc-hr"></div>
     <div class="dms-lc-button" id="dmsCLButtonCleanAll" data-tip="预留功能">
@@ -641,6 +667,7 @@ if (isShowPageBar) {
   const NWC = document.getElementById('dmsCLNWC');
   const FF = document.getElementById('dmsCLFF');
   const TI = document.getElementById('dmsCLTI');
+  const TM = document.getElementById('dmsCLTM');
 
 
 
@@ -690,7 +717,7 @@ if (isShowPageBar) {
   // 查找与替换 https://rawbytz.github.io/find-replace/
   FR.addEventListener('click', Find_Replace, false);
 
-  // WF节点排序 https://rawbytz.github.io/sort/
+  // 节点排序 https://rawbytz.github.io/sort/
   ST.addEventListener('click', WF_Sort, false);
 
   // 节点与字数统计 @rawbytz @seyee
@@ -702,6 +729,8 @@ if (isShowPageBar) {
   // 标签统计与索引生成 https://rawbytz.github.io/tag-index/
   TI.addEventListener('click', TagIndex, false);
 
+  // 文字马赛克
+  TM.addEventListener('click', TextMosaic, false);
 
 
 
